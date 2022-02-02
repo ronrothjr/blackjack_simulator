@@ -68,7 +68,7 @@ class Dealer:
                     self.table.leave(n)
                     add_player(self.table, n)
 
-    def get_card_of_shuffle_in(self):
+    def get_card_or_shuffle_in(self):
         card = self.table.shoe.draw()
         if not card:
             self.table.shoe.refill_the_shoe(copy.deepcopy(self.discard))
@@ -82,7 +82,7 @@ class Dealer:
             for p in self.positions.values():
                 if p and p.hands:
                     for h in p.hands:
-                        card = self.table.shoe.draw()
+                        card = self.get_card_or_shuffle_in()
                         h.get_card(card)
 
     def get_insurance(self) -> None:
@@ -130,11 +130,11 @@ class Dealer:
                 split_hand = copy.copy(hand)
                 hand.cards = [cards[0]]
                 hand.split = True
-                card = self.table.shoe.draw()
+                card = self.get_card_or_shuffle_in()
                 hand.get_card(card)
                 split_hand.cards = [cards[1]]
                 split_hand.split = True
-                card = self.table.shoe.draw()
+                card = self.get_card_or_shuffle_in()
                 split_hand.get_card(card)
                 self.deal_hand(p, split_hand, player)
             elif move == 'double':
@@ -142,16 +142,16 @@ class Dealer:
                 if bet_made:
                     hand.bet += hand.bet
                     hand.doubled = True
-                    card = self.table.shoe.draw()
+                    card = self.get_card_or_shuffle_in()
                     hand.get_card(card)
                     hand.final = 'stand'
                 else:
-                    card = self.table.shoe.draw()
+                    card = self.get_card_or_shuffle_in()
                     hand.get_card(card)
             elif move == 'stand':
                 hand.final = 'stand'
             elif move == 'hit':
-                card = self.table.shoe.draw()
+                card = self.get_card_or_shuffle_in()
                 hand.get_card(card)
         self.stats.hands += 1 if player else 0
 
