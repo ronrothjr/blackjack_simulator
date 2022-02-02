@@ -44,7 +44,7 @@ Simulation options are as follows:
 * iterations: the number of simulations to run - defaulted to 10
 * sessions: the number of sessions incliuded in each simulation - defaulted to 10
 * hours: the number of hours (80 hands per hour) to include in each session - defaulted by the test (usually 8)
-* win_rate: the detailed list of win rates for each play hand to dealer up card matchup
+* win_rate: the detailed list of win rates for each player hand to dealer up card matchup
 
 The following command will start 100 simulations and display the individual card stats with win rates:
 
