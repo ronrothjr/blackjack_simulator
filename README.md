@@ -20,7 +20,7 @@ Tests are defined in `app/cases.json`. You edit them, add your own, and run them
 ```apache
 cd app
 # run 10 iterations of the base_test simulation
-python main --test base_test --iterations 100
+python main.py --test base_test --iterations 100
 ```
 
 Output:
@@ -49,7 +49,7 @@ Simulation options are as follows:
 The following command will start 100 simulations and display the individual card stats with win rates:
 
 ```apache
-python main --test base_test --iterations 100  --sessions 50 --hours 5 --win_rates yes
+python main.py --test base_test --iterations 100  --sessions 50 --hours 5 --win_rates yes
 ```
 
 Sample output:
