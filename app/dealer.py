@@ -1,4 +1,4 @@
-import copy
+import copy, random, traceback
 from bot import Bot
 from hand import Hand
 from player import Player
@@ -14,6 +14,8 @@ class Dealer:
         self.positions: list[Position] = table.positions
         self.bot = Bot(quit_while_behind, quit_while_ahead)
         self.stats = stats if stats else Stats()
+        self.discard = []
+        self.shuffle_in = False
 
     def deal_round(self, add_player) -> int:
         try:
@@ -29,6 +31,7 @@ class Dealer:
             return balance
         except Exception as e:
             print(e)
+            traceback.print_stack()
             return 0
 
     def leave_or_join(self):
@@ -37,10 +40,11 @@ class Dealer:
     def take_bet(self, position: str) -> bool:
         if (not self.table.is_open(position)):
             p = self.positions[position]
-            loss = (p.player.bankroll + p.player.chips - p.player.stats.bankroll) / p.player.stats.bankroll
+            divisor = p.player.stats.bankroll if p.player.stats.bankroll else 1
+            loss = (p.player.bankroll + p.player.chips - p.player.stats.bankroll) / divisor
             if loss:
                 loss
-            make_bet = self.bot.make_bet(True, False, loss, None, 1, self.table.shoe, True)
+            make_bet = self.bot.make_bet(True, False, loss, None, [], 1, self.table.shoe, True)
             if make_bet:
                 true_count = self.table.shoe.true_count()
                 bet_made = p.make_a_bet(count=true_count)
@@ -52,6 +56,7 @@ class Dealer:
     def get_bets(self, add_player=None) -> None:
         for n, p in self.positions.items():
             if p and p.role == 'Dealer':
+                p.hands = []
                 p.add_hand()
             elif p and p.role == 'Player':
                 bet_made = self.take_bet(n)
@@ -62,6 +67,15 @@ class Dealer:
                     self.stats.leaves += 1
                     self.table.leave(n)
                     add_player(self.table, n)
+
+    def get_card_of_shuffle_in(self):
+        card = self.table.shoe.draw()
+        if not card:
+            self.table.shoe.refill_the_shoe(copy.deepcopy(self.discard))
+            card = self.table.shoe.draw()
+            self.shuffle_in = True
+            self.discard = []
+        return card
 
     def deal_table(self) -> None:
         for x in ['hole', 'up']:
@@ -80,15 +94,19 @@ class Dealer:
             if p and p.role == 'Player' and not p.insurance:
                 if p.hands:
                     for h in p.hands:
-                        win_lose = p.player.bankroll - p.player.stats.bankroll / p.player.stats.bankroll
-                        decision = self.bot.get_insurance(False, True, win_lose, h, up_card, self.table.shoe, True)
+                        divisor = p.player.stats.bankroll if p.player.stats.bankroll else 1
+                        win_lose = p.player.bankroll - p.player.stats.bankroll / divisor
+                        decision = self.bot.get_insurance(False, True, win_lose, h, p.hands, up_card, self.table.shoe, True)
                         if decision:
                             p.get_insurance(h.bet)
                             p.player.stats.insurance += 1
                             self.stats.insurance += 1
 
     def deal_hand(self, p: Position, hand: Hand, player: bool) -> None:
-        win_lose = p.player.bankroll - p.player.stats.bankroll / p.player.stats.bankroll if p.player else 0
+        win_lose = 0
+        if p.player:    
+            divisor = p.player.stats.bankroll if p.player.stats.bankroll else 1
+            win_lose = p.player.bankroll - p.player.stats.bankroll / divisor
         dealer = self.positions['Dealer'].hands[0].cards
         up_card = 10 if dealer[1]['r'] > 9 else dealer[1]['r']
         while not hand.final:
@@ -98,7 +116,7 @@ class Dealer:
                 else:
                     hand.final = hand.final if hand.final else 'stand'
             true_count = self.table.shoe.true_count()
-            move = self.bot.make_a_move(False, False, win_lose, hand, up_card, self.table.shoe, player)
+            move = self.bot.make_a_move(False, False, win_lose, hand, p.hands, up_card, self.table.shoe, player)
             if hand.is_blackjack() and not hand.doubled and not hand.split:
                 hand.final = 'blackjack'
             elif hand.is_twentyone():
@@ -216,7 +234,8 @@ class Dealer:
         player.chips += hand.bet + win
         player.stats.balance += win
         player.stats.win += 1
-        player.stats.win_percentage = player.stats.win / player.stats.hands
+        divisor = player.stats.hands if player.stats.hands else 1
+        player.stats.win_percentage = player.stats.win / divisor
         self.stats.win += 1
         return win
     
@@ -225,7 +244,8 @@ class Dealer:
         player.chips += win - hand.insurance
         player.stats.balance += hand.bet - hand.insurance
         player.stats.win += 1
-        player.stats.win_percentage = player.stats.win / player.stats.hands
+        divisor = player.stats.hands if player.stats.hands else 1
+        player.stats.win_percentage = player.stats.win / divisor
         self.stats.win += 1
         return hand.bet - hand.insurance
     
@@ -250,7 +270,10 @@ class Dealer:
             if p and p.hands:
                 p.bet = 0
                 players += 1
+                self.discard += copy.deepcopy(p.hands)
                 p.clear_cards()
         is_shoe_depleted = len(self.table.shoe.cards) < players * 20
-        if is_shoe_depleted:
+        if is_shoe_depleted or self.shuffle_in:
+            self.discard = []
+            self.shuffle_in = False
             self.table.shoe.refill_the_shoe()

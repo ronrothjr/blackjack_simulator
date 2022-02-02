@@ -32,15 +32,16 @@ class Bot:
         is_bet = params['is_bet']
         is_insurance = params['is_insurance']
         cards = [c['r'] for c in params['hand'].cards] if params['hand'] else []
+        hands = params['hands']
         number_of_cards = len(params['hand'].cards) if params['hand'] else 0
         hard_total = params['hand'].card_total() if params['hand'] else 0
         is_soft_total = number_of_cards == 2 and params['hand'].soft_total() > 11 and 1 in cards if params['hand'] else False
         true_count = params['shoe'].true_count()
         is_player = params.get('is_player', True)
-        return Params(number_of_cards, win_lose, is_bet, is_insurance, cards, params['up_card'], hard_total, is_player, is_soft_total, true_count)
+        return Params(number_of_cards, win_lose, is_bet, is_insurance, cards, hands, params['up_card'], hard_total, is_player, is_soft_total, true_count)
 
-    def make_bet(self, is_bet, is_insurance, win_lose, hand, up_card, shoe, is_player=True) -> str:
-        params = self.get_params({'is_bet': is_bet, 'is_insurance': is_insurance, 'win_lose': win_lose, 'hand': hand, 'up_card': up_card, 'shoe': shoe, 'is_player': is_player})
+    def make_bet(self, is_bet, is_insurance, win_lose, hand, hands, up_card, shoe, is_player=True) -> str:
+        params = self.get_params({'is_bet': is_bet, 'is_insurance': is_insurance, 'win_lose': win_lose, 'hand': hand, 'hands': hands, 'up_card': up_card, 'shoe': shoe, 'is_player': is_player})
         if is_player:
             for strategy in self.strategies.values():
                 move = self.apply_strategies(params, strategy)
@@ -48,8 +49,8 @@ class Bot:
                     return move
         return ''
 
-    def get_insurance(self, is_bet, is_insurance, win_lose, hand, up_card, shoe, is_player=True) -> str:
-        params = self.get_params({'is_bet': is_bet, 'is_insurance': is_insurance, 'win_lose': win_lose, 'hand': hand, 'up_card': up_card, 'shoe': shoe, 'is_player': is_player})
+    def get_insurance(self, is_bet, is_insurance, win_lose, hand, hands, up_card, shoe, is_player=True) -> str:
+        params = self.get_params({'is_bet': is_bet, 'is_insurance': is_insurance, 'win_lose': win_lose, 'hand': hand, 'hands': hands, 'up_card': up_card, 'shoe': shoe, 'is_player': is_player})
         is_player_without_a_blackjack = is_player and not hand.is_blackjack()
         if is_player_without_a_blackjack:
             for strategy in self.strategies.values():
@@ -58,8 +59,8 @@ class Bot:
                     return move
         return ''
 
-    def make_a_move(self, is_bet, is_insurance, win_lose, hand, up_card, shoe, is_player=True) -> str:
-        params = self.get_params({'is_bet': is_bet, 'is_insurance': is_insurance, 'win_lose': win_lose, 'hand': hand, 'up_card': up_card, 'shoe': shoe, 'is_player': is_player})
+    def make_a_move(self, is_bet, is_insurance, win_lose, hand, hands, up_card, shoe, is_player=True) -> str:
+        params = self.get_params({'is_bet': is_bet, 'is_insurance': is_insurance, 'win_lose': win_lose, 'hand': hand, 'hands': hands, 'up_card': up_card, 'shoe': shoe, 'is_player': is_player})
         if is_player:
             for strategy in self.strategies.values():
                 move = self.apply_strategies(params, strategy)

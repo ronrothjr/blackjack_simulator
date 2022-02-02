@@ -34,14 +34,16 @@ class TestStrategy(unittest.TestCase):
     def test_strategy_has_a_rule_for_matching(self):
         bot = Bot()
         shoe = Shoe()
-        params = bot.get_params({'is_bet': False, 'is_insurance': False, 'win_lose': 0, 'hand': Hand().set_cards([{'r':1}, {'r':1}]), 'up_card': 6, 'shoe': shoe, 'is_player': True})
+        hand = Hand().set_cards([{'r':1}, {'r':1}])
+        params = bot.get_params({'is_bet': False, 'is_insurance': False, 'win_lose': 0, 'hand': hand, 'hands': [hand], 'up_card': 6, 'shoe': shoe, 'is_player': True})
         is_pretested = self.strategy.pretest(params)
         self.assertTrue(is_pretested)
         self.assertEqual(self.strategy.match.__name__, 'match')
         self.assertTrue(callable(self.strategy.match))
         is_split = self.strategy.match(params)
         self.assertTrue(is_split)
-        params = bot.get_params({'is_bet': False, 'is_insurance': False, 'win_lose': 0, 'hand': Hand().set_cards([{'r':8}, {'r':8}]), 'up_card': 6, 'shoe': shoe, 'is_player': True})
+        hand = Hand().set_cards([{'r':8}, {'r':8}])
+        params = bot.get_params({'is_bet': False, 'is_insurance': False, 'win_lose': 0, 'hand': hand, 'hands': [hand], 'up_card': 6, 'shoe': shoe, 'is_player': True})
         is_split = self.strategy.match(params)
         self.assertTrue(is_split)
 

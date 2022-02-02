@@ -15,11 +15,13 @@ def get_args():
                         help='The number of hours per session')
     parser.add_argument('--win_rate', action='store', required=False, default=None,
                         help='Show win rates for each hand against the dealer up card')
+    parser.add_argument('--log', action='store', required=False, default=None,
+                        help='Record the details of each simulation in the /app/simulations folder')
     return parser.parse_args()
 
 def main():
     args = get_args()
-    Simulation(test_name=args.test, number_of_simulations=args.iterations, sessions=args.sessions, hours=args.hours, win_rate=args.win_rate).start()
+    Simulation(test_name=args.test, number_of_simulations=args.iterations, sessions=args.sessions, hours=args.hours, win_rate=args.win_rate, log=args.log).start()
 
 if __name__ == '__main__':
     main()

@@ -20,7 +20,7 @@ def get_strategies(quit_while_behind, quite_while_ahead):
         },
         {
             'move': 'split',
-            'pretest': lambda _: _.number_of_cards == 2 and not _.is_bet and not _.is_insurance,
+            'pretest': lambda _: _.number_of_cards == 2 and len(_.hands) < 4 and not _.is_bet and not _.is_insurance,
             'index': lambda _: _.update(cards=','.join([str(card if card < 11 else 10) for card in _.cards])),
             'index_on': 'cards',
             'matrix': {

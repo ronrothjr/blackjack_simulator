@@ -4,6 +4,14 @@ Python console application for running simulations of a blackjack session with s
 
 The purpose of this simulator is to help determine the optimal bankroll and betting strategy during a new blackjack player's first year, but it can be used to start with any bankroll and the code can be altered to handle any scenario required.
 
+Each simulation will result in a bankroll increase or decrease after the specified number of sessions are completed. A bankroll increase is marked as a success and the increase is included in the average winnings. Understand that these numbers are based on perfect game play, counting, deviations, betting strategies, and NOT being "backed off" by the casino. If you find that you can't get in an 8-hour session, then you should use the `--hours` flag to alter the session time.
+
+Sample simulation output:
+```apache
+chance of success: 0.96
+average winnings: 74857.94
+```
+
 #### How It Works
 
 Blackjack Simulator is designed to run an H17 blackjack gaming session with 6 decks for a specified number of hours (80 hands per hour). It uses the basic strategy, counting, and deviations provided publicly by https://www.blackjackapprenticeship.com/.
@@ -47,11 +55,12 @@ Simulation options are as follows:
 * sessions: the number of sessions incliuded in each simulation - defaulted to 10
 * hours: the number of hours (80 hands per hour) to include in each session - defaulted by the test (usually 8)
 * win_rate: the detailed list of win rates for each player hand to dealer up card matchup
+* log: record the details of each simulation in the /app/simulations folder
 
 The following command will start 100 simulations and display the individual card stats with win rates:
 
 ```apache
-python main.py --test base_test --iterations 100  --sessions 50 --hours 5 --win_rates yes
+python main.py --test base_test --iterations 100  --sessions 50 --hours 5 --win_rates yes --log yes
 ```
 
 Sample output:

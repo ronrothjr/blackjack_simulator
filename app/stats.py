@@ -1,6 +1,8 @@
 class Stats:
 
     def __init__(self):
+        self.timestamp = ''
+        self.results = None
         self.cards = {}
         self.bankroll = 0
         self.rounds = 0

@@ -10,16 +10,21 @@ class Shoe:
         self.count = 0
         self.refill_the_shoe()
 
-    def refill_the_shoe(self) -> None:
-        self.cards = []
-        self.count = 0
-        for x in range(self.number_of_decks):
-            self.cards += Deck().cards
+    def refill_the_shoe(self, cards=None) -> None:
+        if cards:
+            self.cards = cards
+        else:
+            self.cards = []
+            self.count = 0
+            for x in range(self.number_of_decks):
+                self.cards += Deck().cards
         random.shuffle(self.cards)
         # burn card
         card = self.draw()
 
     def draw(self) -> dict:
+        if len(self.cards) == 0:
+            return None
         card = self.cards.pop(0)
         self.count += self.count_value(card)
         return card
