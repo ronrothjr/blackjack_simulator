@@ -29,9 +29,9 @@ Output:
 
 ```apache
 STARTING 100 simulations for the following case:
-{'starting_bankroll': 5000, 'starting_risk': 10.0, 'bankroll_threshold': 10000, 'threshold_risk': 1.0, 'hours_to_play': 8, 'number_of_simulations': 100}
+{'starting_bankroll': 5000, 'starting_risk': 10.0, 'bankroll_threshold': 10000, 'threshold_risk': 1.0, 'hours_per_session': 8, 'number_of_simulations': 100}
 FINISHED:
-{'starting_bankroll': 5000, 'starting_risk': 10.0, 'bankroll_threshold': 10000, 'threshold_risk': 1.0, 'hours_to_play': 8, 'number_of_simulations': 100}
+{'starting_bankroll': 5000, 'starting_risk': 10.0, 'bankroll_threshold': 10000, 'threshold_risk': 1.0, 'hours_per_session': 8, 'number_of_simulations': 100}
 chance of success: 0.96
 average winnings: 74857.94
 ```
