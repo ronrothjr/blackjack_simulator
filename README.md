@@ -2,6 +2,8 @@
 
 Python console application for running simulations of a blackjack session with specific tests and reporting of stats
 
+The purpose of this simulator is to help determine the optimal bankroll and betting strategy during a new blackjack player's first year, but it can be used to start with any bankroll and the code can be altered to handle any scenario required.
+
 #### How It Works
 
 Blackjack Simulator is designed to run an H17 blackjack gaming session with 6 decks for a specified number of hours (80 hands per hour). It uses the basic strategy, counting, and deviations provided publicly by https://www.blackjackapprenticeship.com/.
