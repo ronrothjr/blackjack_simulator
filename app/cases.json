@@ -1,0 +1,54 @@
+{
+    "base": {"starting_bankroll": 5000, "starting_risk": 10.0, "bankroll_threshold": 10000, "threshold_risk": 1.0, "hours_to_play": 8},
+    "number_of_simulations": 1,
+    "tests": {
+        "base_test": {
+            "base": {},
+            "cases": []
+        },
+        "starting_balance_testing": {
+            "base": {},
+            "cases": [
+                {"starting_bankroll": 3000, "starting_risk": 40.0, "bankroll_threshold": 5000, "threshold_risk": 10.0, "hours_to_play": 5},
+                {"starting_bankroll": 3000, "starting_risk": 40.0, "bankroll_threshold": 5000, "threshold_risk": 10.0, "hours_to_play": 8},
+                {"starting_bankroll": 3000, "starting_risk": 20.0, "bankroll_threshold": 5000, "threshold_risk": 1.0, "hours_to_play": 5},
+                {"starting_bankroll": 3000, "starting_risk": 20.0, "bankroll_threshold": 5000, "threshold_risk": 1.0, "hours_to_play": 8},
+                {"starting_bankroll": 3000, "starting_risk": 10.0, "bankroll_threshold": 5000, "threshold_risk": 1.0, "hours_to_play": 5},
+                {"starting_bankroll": 3000, "starting_risk": 10.0, "bankroll_threshold": 5000, "threshold_risk": 1.0, "hours_to_play": 8},
+                {"starting_bankroll": 5000, "starting_risk": 40.0, "bankroll_threshold": 10000, "threshold_risk": 10.0, "hours_to_play": 5},
+                {"starting_bankroll": 5000, "starting_risk": 40.0, "bankroll_threshold": 10000, "threshold_risk": 10.0, "hours_to_play": 8},
+                {"starting_bankroll": 5000, "starting_risk": 20.0, "bankroll_threshold": 10000, "threshold_risk": 10.0, "hours_to_play": 5},
+                {"starting_bankroll": 5000, "starting_risk": 20.0, "bankroll_threshold": 10000, "threshold_risk": 10.0, "hours_to_play": 8},
+                {"starting_bankroll": 5000, "starting_risk": 10.0, "bankroll_threshold": 10000, "threshold_risk": 1.0, "hours_to_play": 5},
+                {"starting_bankroll": 5000, "starting_risk": 10.0, "bankroll_threshold": 10000, "threshold_risk": 1.0, "hours_to_play": 8}
+            ]
+        },
+        "quit_while_ahead": {
+            "base": {"starting_bankroll": 5000, "starting_risk": 10.0, "bankroll_threshold": 10000, "threshold_risk": 1.0, "hours_to_play": 8},
+            "cases": [
+                {"quit_while_ahead": 1.5},
+                {"quit_while_ahead": 2},
+                {"quit_while_ahead": 3},
+                {"quit_while_ahead": 4},
+                {"quit_while_ahead": 5},
+                {"quit_while_ahead": 6},
+                {"quit_while_ahead": 7},
+                {"quit_while_ahead": 8}
+            ]
+        },
+        "quit_while_behind": {
+            "base": {"starting_bankroll": 5000, "starting_risk": 10.0, "bankroll_threshold": 10000, "threshold_risk": 1.0, "hours_to_play": 8},
+            "cases": [
+                {"quit_while_behind": -0.2},
+                {"quit_while_behind": -0.25},
+                {"quit_while_behind": -0.3},
+                {"quit_while_behind": -0.35},
+                {"quit_while_behind": -0.4},
+                {"quit_while_behind": -0.45},
+                {"quit_while_behind": -0.5},
+                {"quit_while_behind": -0.6},
+                {"quit_while_behind": -0.75}
+            ]
+        }
+    }
+}
