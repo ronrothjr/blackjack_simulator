@@ -13,7 +13,7 @@ class Session:
         self.table: Table = table if table else Table()
         self.dealer: Dealer = dealer if dealer else Dealer(table=self.table, stats=stats)
         self.positions: list(Position) = self.table.positions
-        self.rounds_to_play: int = self.options.hours_to_play * 80
+        self.rounds_to_play: int = self.options.hours_per_session * 80
 
     def run_session(self) -> 'Session':
         self.add_players(1)

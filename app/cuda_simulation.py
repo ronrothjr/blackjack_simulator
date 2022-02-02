@@ -698,7 +698,7 @@ def run_simulation(simulation) -> None:
             self.risk_of_ruin: int = options.get('risk_of_ruin', 1.0)
             self.buy_in: int = options.get('buy_in', 1000)
             self.number_of_players: int = options.get('number_of_players', 1)
-            self.hours_to_play: int = options.get('hours_to_play', 100)
+            self.hours_per_session: int = options.get('hours_per_session', 100)
             self.re_join_after_bust: bool = options.get('re_join_after_bust', True)
             self.quit_while_behind:int = options.get('quit_while_behind', -100)
             self.quit_while_ahead:int = options.get('quit_while_behind', 1000)
@@ -711,7 +711,7 @@ def run_simulation(simulation) -> None:
             self.table: Table = table if table else Table()
             self.dealer: Dealer = dealer if dealer else Dealer(self.table)
             self.positions: list(Position) = self.table.positions
-            self.rounds_to_play: int = self.options.hours_to_play * 80
+            self.rounds_to_play: int = self.options.hours_per_session * 80
 
         def run_session(self) -> 'Session':
             self.add_players(1)
@@ -754,7 +754,7 @@ def run_simulation(simulation) -> None:
         for x in range(0, 24):
             ror = risk_of_ruin(bankroll, simulation['starting_risk'], simulation['bankroll_threshold'], simulation['threshold_risk'])
             options = simulation.get('options', {})
-            options.update({'bankroll': bankroll, 'risk_of_ruin': ror, 'hours_to_play': simulation['hours_to_play']})
+            options.update({'bankroll': bankroll, 'risk_of_ruin': ror, 'hours_per_session': simulation['hours_per_session']})
             session = Session(options=options)
             bankroll = session.run_session().options.bankroll
             results['sessions'].append(session.report_stats())
