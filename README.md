@@ -4,7 +4,7 @@ Python console application for running simulations of a blackjack session with s
 
 #### How It Works
 
-Blackjack Simulator is designed to run an H17 blackjack gaming session with 6 decks for a specified number of hours (80 hands per hour). It uses the basic strategy, counting, and deviations provided publicly by blackjackapprentice.com.
+Blackjack Simulator is designed to run an H17 blackjack gaming session with 6 decks for a specified number of hours (80 hands per hour). It uses the basic strategy, counting, and deviations provided publicly by https://www.blackjackapprenticeship.com/.
 
 Risk of ruin is part of a betting strategy where the size of your bet in relation to your bankroll determines your risk of losing your money.
 
