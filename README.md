@@ -20,7 +20,7 @@ Tests are defined in `app/cases.json`. You edit them, add your own, and run them
 ```apache
 cd app
 # run 10 iterations of the base_test simulation
-python main.py --test base_test --iterations 100
+python main.py --test base_test --iterations 10
 ```
 
 Output:
