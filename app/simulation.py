@@ -1,5 +1,6 @@
 import copy, json, operator, os
 from concurrent.futures import ProcessPoolExecutor
+from unittest import TextTestResult
 from session import Session
 from stats import Stats
 
@@ -8,11 +9,15 @@ output = []
 
 class Simulation():
 
-    def __init__(self, test_name, number_of_simulations=None):
-        self.get_cases(test_name, number_of_simulations)
+    def __init__(self, test_name=None, number_of_simulations=None, sessions=None, hours=None, win_rate=None):
+        test_name = test_name if test_name else 'base_test'
+        number_of_simulations = number_of_simulations if number_of_simulations else 10
+        sessions = sessions if sessions else 10
+        self.get_cases(test_name, number_of_simulations, sessions, hours, win_rate)
         self.output = []
 
-    def get_cases(self, test_name, number_of_simulations) -> None:
+    def get_cases(self, test_name, number_of_simulations, sessions, hours, win_rate) -> None:
+        self.win_rate = win_rate
         self.local_path = os.path.dirname(os.path.realpath(__file__))
         records = open(os.path.join(self.local_path, 'cases.json'), 'r')
         file_str = records.read()
@@ -22,9 +27,15 @@ class Simulation():
         test = tests.get(test_name)
         base = test['base']
         self.base = base if base else simulations['base']
-        self.base.update(number_of_simulations=number_of_simulations)
         cases = test['cases']
         self.cases = cases if cases else [self.base]
+        for case in self.cases:
+            if number_of_simulations:
+                case['number_of_simulations'] = number_of_simulations
+            if sessions:
+                case['sessions'] = int(sessions)
+            if hours:
+                case['hours_to_play'] = int(hours)
 
     def start(self) -> None:
         simulations = []
@@ -34,7 +45,8 @@ class Simulation():
             simulations.append(simulation)
         with ProcessPoolExecutor(max_workers=50) as executor:
             resp = executor.map(Simulation.run_simulation, simulations)
-        self.collate_and_print_stats(resp)
+        if self.win_rate:
+            self.collate_and_print_stats(resp)
 
     @staticmethod
     def run_simulation(simulation) -> None:
@@ -49,7 +61,9 @@ class Simulation():
         results['chance_of_success'] = results['wins'] / simulation['number_of_simulations']
         results['average_winnings'] = results['winnings'] / simulation['number_of_simulations']
         output.append(results)
+        win_lose = results["bankroll"] - results["starting_bankroll"]
         print(f'FINISHED:\n{simulation}')
+        print(f'bankroll: {results["bankroll"]} ({"+" if win_lose > 0 else ""}{win_lose})')
         print(f'chance of success: {results["chance_of_success"]}')
         print(f'average winnings: {results["average_winnings"]}')
         return stats
@@ -58,7 +72,7 @@ class Simulation():
     def run_sessions(simulation, results, stats):
         bankroll = int(results['starting_bankroll'])
         results['sessions'] = []
-        for x in range(0, 50):
+        for x in range(0, simulation['sessions']):
             ror = risk_of_ruin(bankroll, simulation['starting_risk'], simulation['bankroll_threshold'], simulation['threshold_risk'])
             options = simulation.get('options', {})
             options.update({'bankroll': bankroll, 'risk_of_ruin': ror, 'hours_to_play': simulation['hours_to_play']})
@@ -69,6 +83,7 @@ class Simulation():
             results['sessions'].append(session_stats)
             # print(vars(stats))
         # print(f'bankroll: {bankroll}')
+        results['bankroll'] = bankroll
         results['wins'] += 1 if bankroll > results['starting_bankroll'] else 0
         results['winnings'] += bankroll - results['starting_bankroll'] if bankroll > results['starting_bankroll'] else 0
 
@@ -96,4 +111,11 @@ class Simulation():
 
 
 if __name__ == '__main__':
-    Simulation('base_test', '100').start()
+    options = {
+        'test_name': 'base_test',
+        'number_of_simulations': '100',
+        'sessions': '10',
+        'hours': '3',
+        'win_rate': 'yes'
+    }
+    Simulation(**options).start()
