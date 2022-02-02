@@ -1,6 +1,6 @@
 ## Blackjack Simulator
 
-console application for running simulations of a blackjack session with specific tests and reporting of stats
+Python console application for running simulations of a blackjack session with specific tests and reporting of stats
 
 #### How It Works
 
