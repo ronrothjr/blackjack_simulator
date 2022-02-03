@@ -10,7 +10,7 @@ class Session:
     def __init__(self, table=None, dealer=None, options: SessionOptions=None, stats=None):
         self.stats = stats
         self.options = SessionOptions(options)
-        self.table: Table = table if table else Table()
+        self.table: Table = table if table else Table(max_bet=self.options.max_bet, bet_strategy=self.options.bet_strategy)
         self.dealer: Dealer = dealer if dealer else Dealer(table=self.table, stats=stats)
         self.positions: list(Position) = self.table.positions
         self.rounds_to_play: int = self.options.hours_per_session * 80

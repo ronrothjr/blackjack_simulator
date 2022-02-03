@@ -29,14 +29,8 @@ class Player:
         ror = list(filter(lambda x: (x['risk_of_ruin'] == self.risk_of_ruin), self.ror_sets))
         bet_units = ror[0]['bet_units']
         ror_bet = int(total_units / bet_units)
-        if not ror_bet:
-            ror_bet
         allowed_bet = int(ror_bet / 5) * 5
-        if not allowed_bet:
-            ror_bet
         self.bet_unit = allowed_bet if allowed_bet > 5 else 5
-        if not self.bet_unit:
-            self.bet_unit
         return self.bet_unit
 
     def add_to_bankroll(self, amount) -> None:

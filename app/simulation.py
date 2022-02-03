@@ -9,49 +9,54 @@ output = []
 
 class Simulation():
 
-    def __init__(self, test_name=None, number_of_simulations=None, sessions=None, hours=None, win_rate=None, log=None):
-        test_name = test_name if test_name else 'base_test'
-        self.test_name = test_name
-        number_of_simulations = number_of_simulations if number_of_simulations else 10
-        sessions = sessions if sessions else 10
-        self.get_cases(test_name, number_of_simulations, sessions, hours, win_rate, log)
+    def __init__(self, options):
+        options['test_name'] = options.get('test_name', 'base_test')
+        self.test_name = options['test_name']
+        options['number_of_simulations'] = int(options.get('number_of_simulations', '10'))
+        options['sessions'] = int(options.get('sessions', '10'))
+        self.options = options
+        self.get_cases(options)
         self.output = []
 
-    def get_cases(self, test_name, number_of_simulations, sessions, hours, win_rate, log) -> None:
+    def get_cases(self, options) -> None:
         self.timestamp = datetime.datetime.today().strftime("%Y%m%d%H%M%S%f")
-        self.win_rate = win_rate
+        self.win_rate = options.get('win_rate')
         self.local_path = os.path.dirname(os.path.realpath(__file__))
-        if log:
+        if options.get('log'):
             path = os.path.join(self.local_path, 'simulations')
             if not os.path.exists(path):
                 os.makedirs(path)
-            path = os.path.join(self.local_path, 'simulations', test_name)
+            path = os.path.join(self.local_path, 'simulations', options.get('test_name'))
             if not os.path.exists(path):
                 os.makedirs(path)
-            path = os.path.join(self.local_path, 'simulations', test_name, self.timestamp)
+            path = os.path.join(self.local_path, 'simulations', options.get('test_name'), self.timestamp)
             if not os.path.exists(path):
                 os.makedirs(path)
         records = open(os.path.join(self.local_path, 'cases.json'), 'r')
         file_str = records.read()
         simulations = json.loads(file_str)
-        number_of_simulations = int(number_of_simulations) if number_of_simulations else simulations['number_of_simulations']
+        number_of_simulations = int(options.get('number_of_simulations')) if options.get('number_of_simulations') else simulations['number_of_simulations']
         tests = simulations['tests']
-        test = tests.get(test_name)
+        test = tests.get(options.get('test_name'))
         base = test['base']
         self.base = base if base else simulations['base']
         cases = test['cases']
         self.cases = cases if cases else [self.base]
-        self.log = log
+        self.log = options.get('log')
         for case in self.cases:
-            case['test_name'] = test_name
+            case['test_name'] = options.get('test_name')
             case['folder'] = os.path.join(self.test_name, self.timestamp)
             if number_of_simulations:
                 case['number_of_simulations'] = number_of_simulations
-            if sessions:
-                case['sessions'] = int(sessions)
-            if hours:
-                case['hours_per_session'] = int(hours)
-            if log:
+            if options.get('sessions'):
+                case['sessions'] = int(options.get('sessions'))
+            if options.get('hours'):
+                case['hours_per_session'] = int(options.get('hours'))
+            if options.get('max_bet'):
+                case['max_bet'] = options.get('max_bet')
+            if options.get('bet_strategy'):
+                case['bet_strategy'] = options.get('bet_strategy')
+            if options.get('log'):
                 case['log'] = True
 
     def start(self) -> None:
@@ -108,7 +113,7 @@ class Simulation():
         for x in range(0, simulation['sessions']):
             ror = risk_of_ruin(bankroll, simulation['starting_risk'], simulation['bankroll_threshold'], simulation['threshold_risk'])
             options = simulation.get('options', {})
-            options.update({'bankroll': bankroll, 'risk_of_ruin': ror, 'hours_per_session': simulation['hours_per_session']})
+            options.update({'bankroll': bankroll, 'risk_of_ruin': ror, 'hours_per_session': simulation['hours_per_session'], 'bet_strategy': simulation['bet_strategy']})
             session = Session(options=options, stats=stats)
             bankroll = session.run_session().options.bankroll
             session_stats = session.report_stats()

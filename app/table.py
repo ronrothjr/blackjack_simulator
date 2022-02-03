@@ -4,7 +4,9 @@ from shoe import Shoe
 
 class Table:
 
-    def __init__(self):
+    def __init__(self, max_bet=1000, bet_strategy='optimal'):
+        self.max_bet = max_bet
+        self.bet_strategy = bet_strategy
         self.shoe = Shoe()
         self.positions = {
             'Player 1': None,
@@ -23,7 +25,7 @@ class Table:
 
     def join(self, player, position, buy_in_amount) -> bool:
         if (self.is_open(position)):
-            self.positions[position] = Position(player)
+            self.positions[position] = Position(player, max_bet=self.max_bet, bet_strategy=self.bet_strategy)
             self.positions[position].buy_in(buy_in_amount)
             return True
 

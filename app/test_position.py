@@ -20,6 +20,10 @@ class TestPosition(unittest.TestCase):
         self.assertEqual(self.position.get_insurance.__name__, 'get_insurance') 
         self.assertTrue(callable(self.position.get_insurance))
 
+    def test_position_can_determine_the_bet_spread_based_on_the_count(self):
+        self.assertEqual(self.position.get_bet_spread.__name__, 'get_bet_spread') 
+        self.assertTrue(callable(self.position.get_bet_spread))
+
     def test_position_can_determine_the_adjust_bet_unit_based_on_the_count(self):
         self.assertEqual(self.position.get_adjusted_bet_unit.__name__, 'get_adjusted_bet_unit') 
         self.assertTrue(callable(self.position.get_adjusted_bet_unit))
@@ -49,15 +53,15 @@ class TestPosition(unittest.TestCase):
         self.assertIsInstance(position.hands[0], Hand)
         self.assertEqual(position.hands[0].bet, 50)
 
-    def test_position_can_double_the_bet_on_the_one_count(self):
+    def test_position_can_double_the_bet_on_count_of_2(self):
         player = Player(50000)
         position = Position(player)
         position.buy_in(1000)
-        position.make_a_bet(count=1)
-        self.assertEqual(player.chips, 400)
-        self.assertEqual(position.bet, 600)
+        position.make_a_bet(count=2)
+        self.assertEqual(player.chips, 800)
+        self.assertEqual(position.bet, 200)
         self.assertIsInstance(position.hands[0], Hand)
-        self.assertEqual(position.hands[0].bet, 600)
+        self.assertEqual(position.hands[0].bet, 200)
 
     def test_position_can_receive_a_specified_bet_from_the_player(self):
         player = Player(50000)
