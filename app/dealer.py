@@ -41,10 +41,18 @@ class Dealer:
         if (not self.table.is_open(position)):
             p = self.positions[position]
             divisor = p.player.stats.bankroll if p.player.stats.bankroll else 1
-            loss = (p.player.bankroll + p.player.chips - p.player.stats.bankroll) / divisor
-            if loss:
-                loss
-            make_bet = self.bot.make_bet(True, False, loss, None, [], 1, self.table.shoe, True)
+            win_lose = (p.player.bankroll + p.player.chips - p.player.stats.bankroll) / divisor
+            params = self.bot.get_params({
+                'is_bet': True,
+                'is_insurance': False,
+                'win_lose': win_lose,
+                'hand': None,
+                'hands': [],
+                'up_card': 1,
+                'shoe': self.table.shoe,
+                'is_player': True
+            })
+            make_bet = self.bot.make_bet(params)
             if make_bet:
                 true_count = self.table.shoe.true_count()
                 bet_made = p.make_a_bet(count=true_count)
@@ -96,7 +104,17 @@ class Dealer:
                     for h in p.hands:
                         divisor = p.player.stats.bankroll if p.player.stats.bankroll else 1
                         win_lose = p.player.bankroll - p.player.stats.bankroll / divisor
-                        decision = self.bot.get_insurance(False, True, win_lose, h, p.hands, up_card, self.table.shoe, True)
+                        params = self.bot.get_params({
+                            'is_bet': False,
+                            'is_insurance': True,
+                            'win_lose': win_lose,
+                            'hand': h,
+                            'hands': p.hands,
+                            'up_card': up_card,
+                            'shoe': self.table.shoe,
+                            'is_player': True
+                        })
+                        decision = self.bot.get_insurance(params)
                         if decision:
                             p.get_insurance(h.bet)
                             p.player.stats.insurance += 1
@@ -116,7 +134,17 @@ class Dealer:
                 else:
                     hand.final = hand.final if hand.final else 'stand'
             true_count = self.table.shoe.true_count()
-            move = self.bot.make_a_move(False, False, win_lose, hand, p.hands, up_card, self.table.shoe, player)
+            params = self.bot.get_params({
+                'is_bet': False,
+                'is_insurance': False,
+                'win_lose': win_lose,
+                'hand': hand,
+                'hands': p.hands,
+                'up_card': up_card,
+                'shoe': self.table.shoe,
+                'is_player': player
+            })
+            move = self.bot.make_a_move(params)
             if hand.is_blackjack() and not hand.doubled and not hand.split:
                 hand.final = 'blackjack'
             elif hand.is_twentyone():
@@ -126,7 +154,9 @@ class Dealer:
             elif move == 'surrender':
                 hand.final = 'surrender'
             elif move == 'split':
+                hand.split = True
                 cards = copy.copy(hand.cards)
+                hand.split_aces = cards[0]['r'] == 1 and cards[1]['r'] == 1
                 split_hand = copy.copy(hand)
                 hand.cards = [cards[0]]
                 hand.split = True

@@ -10,6 +10,7 @@ class Hand:
         self.busted = False
         self.doubled = False
         self.split = False
+        self.split_aces = False
         self.final = ''
         self.outcome = ''
 
@@ -29,7 +30,8 @@ class Hand:
             else:
                 total += 10 if card['r'] > 10 else card['r']
         for card in aces:
-            total += 11 if total <= 10 and len(aces) == 1 else 1
+            soft_total = total + 11 + (len(aces)-1 * 1) <= 21
+            total += 11 if total <= 10 and soft_total else 1
         return total
 
     def soft_total(self) -> int:

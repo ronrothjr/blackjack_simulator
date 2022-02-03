@@ -39,7 +39,6 @@ class TestSession(unittest.TestCase):
     def test_session_can_deal_many_rounds_of_blackjack_and_replace_players_with_empty_bankrolls(self):
         self.session.run_session()
         dealer_stats = self.session.dealer.stats
-        player_stats = self.session.dealer.positions['Player 1'].player.stats
         self.session.report_stats()
         self.assertEqual(self.session.rounds_to_play, dealer_stats.rounds)
 

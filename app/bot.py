@@ -40,18 +40,16 @@ class Bot:
         is_player = params.get('is_player', True)
         return Params(number_of_cards, win_lose, is_bet, is_insurance, cards, hands, params['up_card'], hard_total, is_player, is_soft_total, true_count)
 
-    def make_bet(self, is_bet, is_insurance, win_lose, hand, hands, up_card, shoe, is_player=True) -> str:
-        params = self.get_params({'is_bet': is_bet, 'is_insurance': is_insurance, 'win_lose': win_lose, 'hand': hand, 'hands': hands, 'up_card': up_card, 'shoe': shoe, 'is_player': is_player})
-        if is_player:
+    def make_bet(self, params: Params) -> str:
+        if params.is_player:
             for strategy in self.strategies.values():
                 move = self.apply_strategies(params, strategy)
                 if move:
                     return move
         return ''
 
-    def get_insurance(self, is_bet, is_insurance, win_lose, hand, hands, up_card, shoe, is_player=True) -> str:
-        params = self.get_params({'is_bet': is_bet, 'is_insurance': is_insurance, 'win_lose': win_lose, 'hand': hand, 'hands': hands, 'up_card': up_card, 'shoe': shoe, 'is_player': is_player})
-        is_player_without_a_blackjack = is_player and not hand.is_blackjack()
+    def get_insurance(self, params: Params) -> str:
+        is_player_without_a_blackjack = params.is_player and not params.hands[0].is_blackjack()
         if is_player_without_a_blackjack:
             for strategy in self.strategies.values():
                 move = self.apply_strategies(params, strategy)
@@ -59,9 +57,8 @@ class Bot:
                     return move
         return ''
 
-    def make_a_move(self, is_bet, is_insurance, win_lose, hand, hands, up_card, shoe, is_player=True) -> str:
-        params = self.get_params({'is_bet': is_bet, 'is_insurance': is_insurance, 'win_lose': win_lose, 'hand': hand, 'hands': hands, 'up_card': up_card, 'shoe': shoe, 'is_player': is_player})
-        if is_player:
+    def make_a_move(self, params: Params) -> str:
+        if params.is_player:
             for strategy in self.strategies.values():
                 move = self.apply_strategies(params, strategy)
                 if move:
