@@ -8,8 +8,8 @@ Each simulation will result in a bankroll increase or decrease after the specifi
 
 Sample simulation output:
 ```apache
-chance of success: 0.96
-average winnings: 74857.94
+chance of success: 0.811
+average winnings: 6513.232
 ```
 
 #### How It Works
@@ -29,19 +29,19 @@ Tests are defined in `app/cases.json`. You edit them, add your own, and run them
 
 ```apache
 cd app
-# run 10 iterations of the base_test simulation
-python main.py --test base_test --iterations 10
+# run 1000 iterations of the base_test simulation
+python main.py --test base_test --iterations 1000
 ```
 
 Output:
 
 ```apache
-STARTING 100 simulations for the following case:
-{'starting_bankroll': 5000, 'starting_risk': 10.0, 'bankroll_threshold': 10000, 'threshold_risk': 1.0, 'hours_per_session': 8, 'number_of_simulations': 100}
+STARTING 1000 simulations for the following case:
+{'starting_bankroll': 5000, 'starting_risk': 10.0, 'bankroll_threshold': 10000, 'threshold_risk': 1.0, 'hours_per_session': 8, 'test_name': 'base_test', 'folder': 'base_test\\20220203081954847207', 'number_of_simulations': 1000, 'sessions': 12, 'log': True}
 FINISHED:
-{'starting_bankroll': 5000, 'starting_risk': 10.0, 'bankroll_threshold': 10000, 'threshold_risk': 1.0, 'hours_per_session': 8, 'number_of_simulations': 100}
-chance of success: 0.96
-average winnings: 74857.94
+simulation: {'starting_bankroll': 5000, 'starting_risk': 10.0, 'bankroll_threshold': 10000, 'threshold_risk': 1.0, 'hours_per_session': 8, 'test_name': 'base_test', 'folder': 'base_test\\20220203081954847207', 'number_of_simulations': 1000, 'sessions': 12, 'log': True}
+chance of success: 0.811
+average winnings: 6513.232
 ```
 
 Simulation options are as follows:
