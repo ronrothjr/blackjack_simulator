@@ -39,6 +39,7 @@ Optimal bet spread
 
 Kelly bet spread
 | Count | Bet Units |
+|-------|-----------|
 | <= 0  | 1         |
 | 1     | 5         |
 | 2     | 12        |
