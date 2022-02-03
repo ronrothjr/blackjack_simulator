@@ -25,6 +25,27 @@ Risk of ruin is part of a betting strategy where the size of your bet in relatio
 | 10%          | 500       |
 | 1%           | 1000      |
 
+Bet spreads use the bet unit to apply a betting strategy depending on the true count.
+
+Optimal bet spread
+| Count | Bet Units |
+|-------|-----------|
+| <= 1  | 1         |
+| 2     | 4         |
+| 3     | 8         |
+| 4     | 12        |
+| 5     | 16        |
+| >= 6  | 20        |
+
+Kelly bet spread
+| Count | Bet Units |
+|-------|-----------|
+| <= 0  | 1         |
+| 1     | 5         |
+| 2     | 12        |
+| 3     | 19        |
+| 4     | 20        |
+
 Tests are defined in `app/cases.json`. You edit them, add your own, and run them like so:
 
 ```apache
@@ -54,6 +75,8 @@ Simulation options are as follows:
 * iterations: the number of simulations to run - defaulted to 10
 * sessions: the number of sessions incliuded in each simulation - defaulted to 10
 * hours: the number of hours (80 hands per hour) to include in each session - defaulted by the test (usually 8)
+* max_bet: the maximum bet allowed at the table
+* bet_strategy: the bet spread to use during the session (optimal or kelly)
 * win_rate: the detailed list of win rates for each player hand to dealer up card matchup
 * log: record the details of each simulation in the /app/simulations folder
 
