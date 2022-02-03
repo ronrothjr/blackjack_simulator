@@ -8,8 +8,8 @@ Each simulation will result in a bankroll increase or decrease after the specifi
 
 Sample simulation output:
 ```apache
-chance of success: 0.96
-average winnings: 74857.94
+chance of success: 0.811
+average winnings: 6513.232
 ```
 
 #### How It Works
