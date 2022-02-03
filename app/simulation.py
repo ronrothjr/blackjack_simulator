@@ -85,7 +85,7 @@ class Simulation():
             results['winnings'] = 0
             for x in range(0, simulation['number_of_simulations']):
                 Simulation.run_sessions(simulation, results, stats, details)
-            results['chance_of_success'] = results['wins'] / simulation['number_of_simulations']
+            results['chance_of_success'] = float("{:.4}".format(results['wins'] / simulation['number_of_simulations']))
             results['average_winnings'] = results['winnings'] / simulation['number_of_simulations']
             results['simulation'] = simulation
             output.append(results)
@@ -158,8 +158,8 @@ if __name__ == '__main__':
     options = {
         'test_name': 'base_test',
         'number_of_simulations': '100',
-        'sessions': '10',
-        'hours': '3',
+        'sessions': '12',
+        'hours': '8',
         'win_rate': 'yes',
         'log': 'yes'
     }

@@ -252,6 +252,8 @@ class Dealer:
     def push(self, hand: Hand, player: Player) -> int:
         player.chips += hand.bet - hand.insurance
         player.stats.balance += 0 - hand.insurance
+        player.stats.win += 1
+        self.stats.win += 1
         return 0 - hand.insurance
     
     def lose(self, hand: Hand, player: Player) -> int:
@@ -270,9 +272,10 @@ class Dealer:
             if p and p.hands:
                 p.bet = 0
                 players += 1
-                self.discard += copy.deepcopy(p.hands)
+                for h in p.hands:
+                    self.discard += copy.deepcopy(h.cards)
                 p.clear_cards()
-        is_shoe_depleted = len(self.table.shoe.cards) < players * 20
+        is_shoe_depleted = len(self.table.shoe.cards) < players * 5
         if is_shoe_depleted or self.shuffle_in:
             self.discard = []
             self.shuffle_in = False

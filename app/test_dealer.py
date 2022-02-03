@@ -1,4 +1,4 @@
-import unittest
+import copy, unittest
 from dealer import Dealer
 from hand import Hand
 from player import Player
@@ -13,6 +13,7 @@ class TestDealer(unittest.TestCase):
 
     def test_initialize_a_dealer(self):
         self.assertIsInstance(self.dealer, Dealer)
+        self.assertIsInstance(self.dealer.discard, list)
 
     def test_dealer_allows_players_to_leave_or_join(self):
         self.assertEqual(self.dealer.leave_or_join.__name__, 'leave_or_join') 
@@ -46,12 +47,24 @@ class TestDealer(unittest.TestCase):
         self.assertEqual(self.dealer.set_card_stats.__name__, 'set_card_stats') 
         self.assertTrue(callable(self.dealer.set_card_stats))
 
+    def test_dealer_has_a_get_card_or_shuffle_in_method(self):
+        self.assertEqual(self.dealer.get_card_or_shuffle_in.__name__, 'get_card_or_shuffle_in') 
+        self.assertTrue(callable(self.dealer.get_card_or_shuffle_in))
+
     def test_player_can_bet_at_a_position(self):
         self.add_player_one()
         self.dealer.get_bets()
         self.assertEqual(self.dealer.table.positions['Player 1'].bet, 50)
         is_bet_taken = self.dealer.take_bet('Player 2')
         self.assertFalse(is_bet_taken)
+
+    def test_shuffle_in_when_shoe_is_empty_while_dealing_the_table(self):
+        self.add_player_one()
+        self.dealer.discard += copy.deepcopy(self.dealer.table.shoe.cards)
+        self.dealer.table.shoe.cards = self.dealer.table.shoe.cards = []
+        self.dealer.get_bets()
+        self.dealer.deal_table()
+        self.assertGreater(len(self.dealer.table.shoe.cards), 300)
 
     def test_deal_cards_to_positions_with_a_bet(self):
         self.add_player_one()
