@@ -55,6 +55,16 @@ class TestHand(unittest.TestCase):
         self.hand.get_card({'r': 1, 's': 1})
         card_total = self.hand.card_total()
         self.assertEqual(card_total, 12)
+        self.hand.cards = []
+        self.hand.get_card({'r': 1, 's': 1})
+        card_total = self.hand.card_total()
+        self.assertEqual(card_total, 11)
+        self.hand.get_card({'r': 1, 's': 1})
+        card_total = self.hand.card_total()
+        self.assertEqual(card_total, 12)
+        self.hand.get_card({'r': 8, 's': 1})
+        card_total = self.hand.card_total()
+        self.assertEqual(card_total, 20)
 
     def test_if_hand_is_busted(self):
         self.hand.get_card({'r': 2, 's': 1})
