@@ -113,7 +113,7 @@ class Simulation():
         for x in range(0, simulation['sessions']):
             ror = risk_of_ruin(bankroll, simulation['starting_risk'], simulation['bankroll_threshold'], simulation['threshold_risk'])
             options = simulation.get('options', {})
-            options.update({'bankroll': bankroll, 'risk_of_ruin': ror, 'hours_per_session': simulation['hours_per_session'], 'bet_strategy': simulation['bet_strategy']})
+            options.update({'bankroll': bankroll, 'risk_of_ruin': ror, 'hours_per_session': simulation['hours_per_session'], 'bet_strategy': simulation.get('bet_strategy')})
             session = Session(options=options, stats=stats)
             bankroll = session.run_session().options.bankroll
             session_stats = session.report_stats()
@@ -165,7 +165,8 @@ if __name__ == '__main__':
         'number_of_simulations': '100',
         'sessions': '12',
         'hours': '8',
+        'bet_strategy': None,
         'win_rate': 'yes',
         'log': 'yes'
     }
-    Simulation(**options).start()
+    Simulation(options).start()
