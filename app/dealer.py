@@ -159,25 +159,27 @@ class Dealer:
                 hand.split_aces = cards[0]['r'] == 1 and cards[1]['r'] == 1
                 split_hand = copy.copy(hand)
                 hand.cards = [cards[0]]
-                hand.split = True
                 card = self.get_card_or_shuffle_in()
                 hand.get_card(card)
+                if hand.split_aces:
+                    hand.final = 'stand'
                 split_hand.cards = [cards[1]]
                 split_hand.split = True
                 card = self.get_card_or_shuffle_in()
                 split_hand.get_card(card)
-                self.deal_hand(p, split_hand, player)
+                if hand.split_aces:
+                    split_hand.split_aces = True
+                    split_hand.final = 'stand'
+                else:
+                    self.deal_hand(p, split_hand, player)
             elif move == 'double':
                 bet_made = p.make_a_bet(bet=hand.bet, count=true_count)
                 if bet_made:
                     hand.bet += hand.bet
                     hand.doubled = True
-                    card = self.get_card_or_shuffle_in()
-                    hand.get_card(card)
                     hand.final = 'stand'
-                else:
-                    card = self.get_card_or_shuffle_in()
-                    hand.get_card(card)
+                card = self.get_card_or_shuffle_in()
+                hand.get_card(card)
             elif move == 'stand':
                 hand.final = 'stand'
             elif move == 'hit':

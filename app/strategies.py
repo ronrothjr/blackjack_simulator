@@ -6,7 +6,7 @@ def get_strategies(quit_while_behind, quite_while_ahead):
             'index': lambda _: _.update(is_bet=str(_.is_bet)),
             'index_on': 'is_bet',
             'matrix': {
-                'True': lambda _: _.true_count > -1 and _.win_lose > quit_while_behind and _.win_lose < quite_while_ahead
+                'True': lambda _: _.true_count >= 1 or _.true_count < 1 and _.win_lose > quit_while_behind and _.win_lose < quite_while_ahead
             }
         },
         {
