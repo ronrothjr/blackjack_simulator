@@ -13,7 +13,7 @@ chance of success: 0.811
 average winnings: 6513.232
 ```
 
-![Blackjack Simulator](https://raw.github.com/ronrothjr/blackjack_simulator/master/blackjack_simulator.PNG "Blackjack Simulator")
+![Blackjack Simulator](https://raw.githubusercontent.com/ronrothjr/blackjack_simulator/master/blackjack_simulator.PNG "Blackjack Simulator")
 
 #### How It Works
 
