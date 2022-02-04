@@ -1,4 +1,4 @@
-import copy, random, traceback
+import copy, traceback
 from bot import Bot
 from hand import Hand
 from player import Player

@@ -6,7 +6,7 @@ def get_strategies(quit_while_behind, quite_while_ahead):
             'index': lambda _: _.update(is_bet=str(_.is_bet)),
             'index_on': 'is_bet',
             'matrix': {
-                'True': lambda _: _.true_count >= 1 or _.true_count < 1 and _.win_lose > quit_while_behind and _.win_lose < quite_while_ahead
+                'True': lambda _: _.true_count >= 0 and _.win_lose > quit_while_behind and _.win_lose < quite_while_ahead
             }
         },
         {
@@ -20,7 +20,7 @@ def get_strategies(quit_while_behind, quite_while_ahead):
         },
         {
             'move': 'split',
-            'pretest': lambda _: not _.is_bet and not _.is_insurance and _.number_of_cards == 2 and len(_.hands) < 4 and len(list(filter(lambda hand: hand.split_aces, _.hands))) < 2,
+            'pretest': lambda _: not _.is_bet and not _.is_insurance and _.number_of_cards == 2 and len(_.hands) < 4 and len(list(filter(lambda hand: hand.split_aces, _.hands))) < 3,
             'index': lambda _: _.update(cards=','.join([str(card if card < 11 else 10) for card in _.cards])),
             'index_on': 'cards',
             'matrix': {
