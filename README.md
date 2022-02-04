@@ -7,10 +7,13 @@ The purpose of this simulator is to help determine the optimal bankroll and bett
 Each simulation will result in a bankroll increase or decrease after the specified number of sessions are completed. A bankroll increase is marked as a success and the increase is included in the average winnings. Understand that these numbers are based on perfect game play, counting, deviations, betting strategies, and NOT being "backed off" by the casino. If you find that you can't get in an 8-hour session, then you should use the `--hours` flag to alter the session time.
 
 Sample simulation output:
+
 ```apache
 chance of success: 0.811
 average winnings: 6513.232
 ```
+
+[Blackjack Simulator UML.pdf](Blackjack_Simulator UML.pdf)
 
 #### How It Works
 
@@ -18,8 +21,9 @@ Blackjack Simulator is designed to run an H17 blackjack gaming session with 6 de
 
 Risk of ruin is part of a betting strategy where the size of your bet in relation to your bankroll determines your risk of losing your money.
 
+
 | Risk of Ruin | Bet Units |
-|--------------|-----------|
+| -------------- | ----------- |
 | 40%          | 200       |
 | 20%          | 400       |
 | 10%          | 500       |
@@ -28,8 +32,10 @@ Risk of ruin is part of a betting strategy where the size of your bet in relatio
 Bet spreads use the bet unit to apply a betting strategy depending on the true count.
 
 Optimal bet spread
+
+
 | Count | Bet Units |
-|-------|-----------|
+| ------- | ----------- |
 | <= 1  | 1         |
 | 2     | 4         |
 | 3     | 8         |
@@ -38,8 +44,10 @@ Optimal bet spread
 | >= 6  | 20        |
 
 Kelly bet spread
+
+
 | Count | Bet Units |
-|-------|-----------|
+| ------- | ----------- |
 | <= 0  | 1         |
 | 1     | 5         |
 | 2     | 12        |
